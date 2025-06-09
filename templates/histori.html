@@ -1,0 +1,262 @@
+{% load static %}
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: url('https://images7.alphacoders.com/120/1201788.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body::before {
+    content: "";
+    background: white;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    z-index: -1;
+}
+
+h2 {
+    color: #004aad;
+    text-align: center;
+    margin-top: 20px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.transaksi-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.transaksi-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    padding: 15px 20px;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.transaksi-card:hover {
+    transform: translateY(-5px);
+}
+
+.transaksi-card h3 {
+    margin: 0 0 10px;
+    color: #004aad;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.item-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 8px;
+    max-height: 110px;
+    overflow-y: auto;
+}
+
+.item-list li {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    color: #222;
+}
+
+.item-list li span {
+    font-weight: 700;
+    color: #004aad;
+    margin-right: 6px;
+}
+
+.total {
+    margin-top: 12px;
+    font-weight: 700;
+    color: #222;
+    font-size: 1rem;
+    text-align: right;
+}
+
+.status-transaksi {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-align: right;
+}
+
+.status-transaksi span {
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.status-sudah {
+    color: green;
+}
+
+.status-pending {
+    color: orange;
+}
+
+.status-lain {
+    color: gray;
+}
+
+.no-transaksi {
+    max-width: 520px;
+    margin: 80px auto;
+    background: rgba(255,255,255,0.5);
+    padding: 15px 15px;
+    border-radius: 5px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    font-size: 1.2rem;
+    color: #444;
+    backdrop-filter: blur(2px);
+}
+
+.btn-checkout {
+    display: block;
+    width: fit-content;
+    margin: 40px auto 30px;
+    padding: 14px 30px;
+    background-color: #004aad;
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 74, 173, 0.5);
+}
+
+.btn-checkout:hover {
+    background-color: #00347a;
+}
+
+@media screen and (max-width: 992px) {
+    .transaksi-container {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 90%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .transaksi-container {
+        grid-template-columns: 1fr;
+        max-width: 90%;
+    }
+}
+.btn-bayar {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #27ae60;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-bayar:hover {
+  background-color: #1e8449;
+}
+
+</style>
+
+<h2>Riwayat Transaksi Kamu</h2>
+<form method="post" action="{% url 'transaksi:clear_history' %}" style="text-align:center; margin: 20px 0;">
+  {% csrf_token %}
+  <button type="submit" style="background:#e74c3c; color:#fff; padding:10px 20px; border:none; border-radius:10px; cursor:pointer;">
+    Hapus Semua History
+  </button>
+</form>
+
+{% if transaksis %}
+  <div class="transaksi-container">
+  {% for transaksi in transaksis %}
+    <div class="transaksi-card">
+      <h3>Tanggal: {{ transaksi.tanggal|date:"d F Y" }}</h3>
+      <ul class="item-list">
+        {% for item in transaksi.items.all %}
+          <li>
+            <span>{{ item.quantity }}x</span>
+            {% if item.produk %}
+              {{ item.produk.nama }}
+            {% else %}
+              [Produk sudah tidak tersedia]
+            {% endif %}
+            <br>
+            Harga saat beli: Rp {{ item.harga_saat_beli|floatformat:0 }}
+          </li>
+        {% endfor %}
+</ul>
+<div class="total">Total Pembayaran: Rp {{ transaksi.total_harga|floatformat:0 }}</div>
+
+<div class="status-transaksi">
+{% if transaksi.status == "pending" or transaksi.status == "belum dibayar" %}
+  <span class="status-pending">{{ transaksi.status|capfirst }}</span>
+
+{% if transaksi.cart %}
+  <!-- Pembayaran dari keranjang -->
+  <form method="post" action="{% url 'transaksi:bayar_dari_cart' transaksi.cart.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn-bayar">Bayar Sekarang</button>
+  </form>
+{% else %}
+  <!-- Pembayaran tanpa keranjang (langsung beli) -->
+  <a href="{% url 'transaksi:halaman_bayar' transaksi.id %}" class="btn-bayar">Bayar Sekarang</a>
+{% endif %}
+
+
+  {% else %}
+    <span class="status-lain">{{ transaksi.status|capfirst }}</span>
+  {% endif %}
+</div>
+
+
+<div class="total">Total: Rp {{ transaksi.total_harga|floatformat:0 }}</div>
+<div class="dibayar">Sudah Dibayar: Rp {{ transaksi.jumlah_terbayar|floatformat:0 }}</div>
+<div class="sisa">Sisa: Rp {{ transaksi.total_harga|floatformat:0|add:"-"|add:transaksi.jumlah_terbayar|floatformat:0 }}</div>
+
+
+      <div style="text-align:right; margin-top: 10px;">
+        <a href="{% url 'transaksi:cetak_transaksi_struk' transaksi.id %}" target="_blank">Cetak Struk (PDF)</a>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+{% else %}
+  <div class="no-transaksi">
+    <img src="https://i.pinimg.com/736x/2a/eb/5b/2aeb5bc6707b266b6d2657ad78c100c5.jpg" alt="Belum ada transaksi" style="width:170px; margin-bottom:15px;">
+    <p>Wah, kamu belum pernah melakukan transaksi 😞</p>
+    <p>Ayo mulai berbelanja sekarang dan nikmati promo menarik kami!</p>
+  </div>
+{% endif %}
+
+<a href="{% url 'daftar_produk' %}" class="btn-checkout">Kembali ke Produk</a>

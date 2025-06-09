@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Daftar Akun Baru - Randesu Store</title>
+    <style>
+        /* Reset sedikit */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7f9fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 400px;
+            border-top: 8px solid #004aad; /* Biru khas Indomaret */
+        }
+
+        h2 {
+            color: #d21e2b; /* Merah Indomaret */
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 28px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form p {
+            margin-bottom: 18px;
+        }
+
+        form p label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #004aad;
+        }
+
+        form p input,
+        form p select,
+        form p textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        form p input:focus,
+        form p select:focus,
+        form p textarea:focus {
+            border-color: #d21e2b;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background: #d21e2b;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: #a9171f;
+        }
+
+        p.login-link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        p.login-link a {
+            color: #004aad;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        p.login-link a:hover {
+            color: #d21e2b;
+            text-decoration: underline;
+        }
+
+        /* Styling Django form errors (optional) */
+        .errorlist {
+            color: #d21e2b;
+            font-size: 13px;
+            margin-top: 4px;
+            margin-bottom: 10px;
+            list-style: none;
+            padding-left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Daftar Akun Baru</h2>
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Daftar</button>
+        </form>
+        <p class="login-link">
+            Sudah punya akun? <a href="{% url 'login' %}">Login di sini</a>
+        </p>
+    </div>
+</body>
+</html>

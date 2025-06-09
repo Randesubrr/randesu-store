@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Struk Transaksi</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        /* Gambar background di posisi absolut */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .struk {
+            border: 1px dashed #333;
+            padding: 20px;
+            width: 380px;
+            margin: 50px auto;
+            background: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            text-align: center;
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #004aad;
+        }
+
+        .info {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .items-table th, .items-table td {
+            border-bottom: 1px dotted #aaa;
+            padding: 4px;
+            text-align: left;
+        }
+
+        .items-table th {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .total {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background image positioned absolutely -->
+    <img src="C:\Users\ALIFIA\Documents\background.jpg" class="background" />
+
+    <div class="struk">
+        <div class="logo">
+            <h2>Randesu Store</h2>
+        </div>
+
+        <div class="info">
+            <p><strong>ID Transaksi:</strong> {{ transaksi.id }}</p>
+            <p><strong>Tanggal:</strong> {{ transaksi.tanggal|date:"d F Y H:i" }}</p>
+            <p><strong>Nama Pelanggan:</strong> {{ transaksi.user.username }}</p>
+        </div>
+
+        <table class="items-table">
+            <tr>
+                <th>Qty</th>
+                <th>Item</th>
+                <th style="text-align:right;">Subtotal</th>
+            </tr>
+            {% for item in transaksi.items.all %}
+            <tr>
+                <td style="text-align:center;">{{ item.quantity }}x</td>
+                <td>{{ item.produk.nama }}</td>
+                <td style="text-align:right;">Rp {{ item.harga_saat_beli|floatformat:0 }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="total">
+            Total: Rp {{ transaksi.total_harga|floatformat:0 }}
+        </div>
+
+        <div class="footer">
+            Terima kasih telah berbelanja!<br>
+            www.randesu brrbrr patapim.com
+        </div>
+    </div>
+</body>
+</html>

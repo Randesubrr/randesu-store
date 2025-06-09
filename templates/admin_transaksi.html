@@ -1,0 +1,10 @@
+<form method="post" action="{% url 'ubah_status_transaksi' transaksi.id %}">
+    {% csrf_token %}
+    <select name="status">
+        <option value="pending" {% if transaksi.status == 'pending' %}selected{% endif %}>Pending</option>
+        <option value="dibayar" {% if transaksi.status == 'dibayar' %}selected{% endif %}>Dibayar</option>
+        <option value="dikirim" {% if transaksi.status == 'dikirim' %}selected{% endif %}>Dikirim</option>
+        <option value="selesai" {% if transaksi.status == 'selesai' %}selected{% endif %}>Selesai</option>
+    </select>
+    <button type="submit">Ubah</button>
+</form>

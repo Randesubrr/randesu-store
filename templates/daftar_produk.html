@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Produk</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e6f0fa;
+        }
+
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url("/media/produk/Background.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        header {
+            background-color: #005baa;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        .produk-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .produk-card {
+            background-color: #ffffffcc;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 240px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-top: 5px solid #005baa;
+        }
+
+        .produk-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .produk-card img {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .produk-card h2, .produk-card p {
+            text-align: center;
+        }
+
+        .btn-beli {
+            margin-top: 10px;
+            background-color: #f1c40f;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-beli:hover {
+            background-color: #f39c12;
+        }
+
+        .keranjang-icon {
+            font-size: 1.5rem;
+            margin-top: 8px;
+            text-decoration: none;
+        }
+
+        .btn-kembali {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #005baa;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            z-index: 999;
+        }
+
+        .btn-kembali:hover {
+            background-color: #003f7f;
+        }
+
+        form.search-bar {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        form.search-bar input[type="text"] {
+            padding: 8px;
+            width: 250px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+
+        form.search-bar button,
+        .btn-refresh {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            background-color: #005baa;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        form.search-bar button:hover,
+        .btn-refresh:hover {
+            background-color: #004080;
+        }
+
+        .top-right-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .lihat-keranjang,
+        .history-saya {
+            background-color: #f1c40f;
+            color: #333;
+            padding: 10px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .lihat-keranjang:hover {
+            background-color: #f39c12;
+        }
+
+        .history-saya {
+            background-color: #e3002b;
+            color: white;
+        }
+
+        .history-saya:hover {
+            background-color: #b20023;
+        }
+
+        .rating-form select,
+        .rating-form button {
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .produk-card {
+                width: 90%;
+            }
+
+            .top-right-buttons {
+                flex-direction: column;
+                gap: 8px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .btn-kembali {
+                bottom: 10px;
+                left: 10px;
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            form.search-bar input[type="text"] {
+                width: 80%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-image"></div>
+
+    <header>
+        <h1>Daftar Produk</h1>
+        <div class="top-right-buttons">
+            <a href="{% url 'view_cart' %}" class="lihat-keranjang">🛍️ Keranjang</a>
+            <a href="{% url 'transaksi:histori_transaksi' %}" class="history-saya">📜 History</a>
+        </div>
+    </header>
+
+    <form method="get" action="{% url 'daftar_produk' %}" class="search-bar">
+        <input type="text" name="q" placeholder="Cari produk..." value="{{ request.GET.q }}">
+        <button type="submit">Cari</button>
+        <a href="{% url 'daftar_produk' %}" class="btn-refresh">🔄</a>
+    </form>
+
+    <div class="produk-container">
+        {% for produk in produk_list %}
+        <div class="produk-card">
+            <a href="{% url 'detail_produk' produk.id %}">
+                {% if produk.gambar %}
+                    <img src="{{ produk.gambar.url }}" alt="{{ produk.nama }}">
+                {% else %}
+                    <img src="{% static 'img/default.jpg' %}" alt="Gambar default">
+                {% endif %}
+                <h2>{{ produk.nama }}</h2>
+            </a>
+            <p>Harga: Rp{{ produk.harga|floatformat:0 }}</p>
+            <p>Stok: {{ produk.stok }}</p>
+            <p>Kategori: {{ produk.kategori }}</p>
+            <p>Rating: ⭐ {{ produk.rata_rating|floatformat:1 }}/5 ({{ produk.jumlah_rating }} ulasan)</p>
+
+            <a href="{% url 'add_to_cart_and_history' produk.id %}" class="btn-beli">Beli</a>
+            <a href="{% url 'add_to_cart' produk.id %}" class="keranjang-icon">🛒</a>
+
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'beri_rating' produk.id %}" class="rating-form">
+                {% csrf_token %}
+                <select name="bintang">
+                    <option value="1">⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                </select>
+                <button type="submit">Kirim</button>
+            </form>
+            {% else %}
+            <p><a href="{% url 'login' %}">Login untuk memberi rating</a></p>
+            {% endif %}
+
+            {% if request.user.is_superuser %}
+            <form action="{% url 'hapus_produk' produk.id %}" method="post" style="margin-top: 10px;">
+                {% csrf_token %}
+                <button type="submit" style="background-color: #e74c3c; color: white; padding: 8px 16px; border: none; border-radius: 10px; cursor: pointer;">
+                    Hapus Produk 🗑️
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin: 30px 0;">
+        {% if page_obj.has_previous %}
+            <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}">⬅️</a>
+        {% endif %}
+        <span style="margin: 0 10px;">Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}">➡️</a>
+        {% endif %}
+    </div>
+
+    <a href="/" class="btn-kembali">← Kembali</a>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randesu Store</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("../media/produk/randesu.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.3;
+        z-index: -1;
+      }
+
+
+        header {
+            background-color: #005baa;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .auth-buttons a,
+        .auth-buttons button {
+            background-color: white;
+            color: #005baa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+        nav {
+            background-color: #007bff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .admin-button {
+            background-color: #F1C40F;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-button:hover {
+            background-color: #F39C12;
+        }
+
+        .slider {
+            width: 100%;
+            overflow: hidden;
+            margin: 30px auto;
+            max-width: 600px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .slider-track {
+            display: flex;
+            width: 400%;
+            animation: slide 8s infinite;
+        }
+
+        .slide {
+            flex: 0 0 25%;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .slide img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @keyframes slide {
+            0%, 20% { transform: translateX(0%); }
+            25%, 45% { transform: translateX(-25%); }
+            50%, 70% { transform: translateX(-50%); }
+            75%, 95% { transform: translateX(-75%); }
+            100% { transform: translateX(0%); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .auth-buttons {
+                flex-direction: column;
+                top: auto;
+                right: 10px;
+                bottom: 10px;
+            }
+
+            nav a {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            section {
+                padding: 15px;
+            }
+
+            .slider-track {
+                width: 400%;
+            }
+
+            .slide {
+                flex: 0 0 100%;
+            }
+
+            @keyframes slide {
+                0%, 20% { transform: translateX(0%); }
+                25%, 45% { transform: translateX(-100%); }
+                50%, 70% { transform: translateX(-200%); }
+                75%, 95% { transform: translateX(-300%); }
+                100% { transform: translateX(0%); }
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="auth-buttons">
+        {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+    <h1>Selamat Datang di Randesu Store</h1>
+    <p>Belanja mudah, cepat, dan hemat!</p>
+</header>
+
+<nav>
+    <a href="/produk/daftar">Masuk</a>
+</nav>
+
+<section>
+    <h2>Promo Hari Ini!</h2>
+    <p>
+        Nikmati berbagai penawaran menarik yang hanya tersedia hari ini! Dapatkan potongan harga hingga 50% untuk berbagai produk kebutuhan harian, mulai dari makanan ringan, minuman segar, hingga perlengkapan rumah tangga favorit kamu. 
+    </p>
+    <p>
+        Belanja hemat kini makin mudah dengan Indomaret Online! Cukup klik, bayar, dan tunggu barang sampai di depan pintu rumahmu.
+    </p>
+</section>
+
+<section>
+    <h2>Produk Unggulan</h2>
+    <p>Kami telah memilihkan produk-produk terbaik untuk Anda!</p>
+
+    <div class="slider">
+        <div class="slider-track">
+            <div class="slide">
+                <img src="https://solvent-production.s3.amazonaws.com/media/images/products/2021/04/2488a.jpg" alt="Produk 1">
+                <p>Produk 1</p>
+            </div>
+            <div class="slide">
+                <img src="https://c.alfagift.id/product/1/1_A09350001879_20211001113946725_base.jpg" alt="Produk 2">
+                <p>Produk 2</p>
+            </div>
+            <div class="slide">
+                <img src="https://gratisongkir-storage.com/products/900x900/YZqgq84LCCzV.jpg" alt="Produk 3">
+                <p>Produk 3</p>
+            </div>
+            <div class="slide">
+                <img src="https://awsimages.detik.net.id/community/media/visual/2015/09/02/0304cf7b-5d92-4636-8ccc-8fe21e13f881.jpg?w=600&q=90" alt="Produk 4">
+                <p>Produk 4</p>
+            </div>
+        </div>
+    </div>
+    <p>Semua produk unggulan ini hadir dengan harga spesial dan jaminan kualitas terbaik.</p>
+</section>
+
+{% if user.is_superuser %}
+<section>
+    <a href="{% url 'dashboard' %}" class="admin-button">Laporan</a>
+</section>
+{% endif %}
+
+</body>
+</html>

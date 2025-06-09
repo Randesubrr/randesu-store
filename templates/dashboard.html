@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #005baa;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+        }
+
+        .stat-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 1.5rem;
+            color: #005baa;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 1.2rem;
+            color: #444;
+        }
+
+        .produk-stok-tipis {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+
+        .produk-stok-tipis h3 {
+            font-size: 1.5rem;
+            color: #e3002b;
+            margin-bottom: 20px;
+        }
+
+        .produk-stok-tipis ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .produk-stok-tipis li {
+            font-size: 1.1rem;
+            color: #444;
+            margin: 8px 0;
+        }
+
+        .produk-stok-tipis li.empty {
+            color: green;
+            font-style: italic;
+        }
+
+        .btn-kembali {
+            background-color: #005baa;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+        }
+
+        .btn-kembali:hover {
+            background-color: #003f7f;
+        }
+
+        .btn-admin {
+            background-color: #4CAF50; /* Warna hijau khas admin */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px; /* Posisi tombol admin di sebelah kanan */
+            z-index: 999;
+        }
+
+        .btn-admin:hover {
+            background-color: #388e3c; /* Warna hijau lebih gelap saat hover */
+        }
+
+        .transaksi-item {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .transaksi-item h4 {
+            font-size: 1.5rem;
+            color: #005baa;
+        }
+
+        .transaksi-item p {
+            font-size: 1.2rem;
+            color: #444;
+        }
+
+        .transaksi-item form {
+            margin-top: 10px;
+        }
+
+        .transaksi-item select,
+        .transaksi-item button {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .transaksi-item select {
+            font-size: 1rem;
+        }
+
+        .transaksi-item button {
+            background-color: #005baa;
+            color: white;
+            font-weight: bold;
+        }
+
+        .transaksi-item button:hover {
+            background-color: #003f7f;
+        }
+
+        /* Button for Lihat Laporan */
+        .btn-laporan-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-laporan {
+            background-color: #f39c12;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-laporan:hover {
+            background-color: #e67e22;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Dashboard Admin</h1>
+</header>
+
+<div class="stats-container">
+    <div class="stat-card">
+        <h3>Total Users</h3>
+        <p>{{ total_users }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Total Produk</h3>
+        <p>{{ total_produk }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Total Transaksi</h3>
+        <p>{{ total_transaksi }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Transaksi Hari Ini</h3>
+        <p>{{ transaksi_hari_ini }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>Total Pendapatan</h3>
+        <p>Rp {{ total_pendapatan }}</p>
+    </div>
+</div>
+
+<div class="produk-stok-tipis">
+    <h3>Produk Stok Tipis:</h3>
+    <ul>
+        {% for p in produk_stok_tipis %}
+            <li>{{ p.nama }} (stok: {{ p.stok }})</li>
+        {% empty %}
+            <li class="empty">Semua stok aman</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Daftar Transaksi -->
+<h3>Daftar Transaksi</h3>
+{% for transaksi in transaksi_list %}
+    <div class="transaksi-item">
+        <h4>Transaksi ID: {{ transaksi.id }}</h4>
+        <p>Status: {{ transaksi.status }}</p>
+        <form method="post" action="{% url 'transaksi:ubah_status_transaksi' transaksi.id %}">
+            {% csrf_token %}
+            <select name="status">
+                <option value="pending" {% if transaksi.status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="dibayar" {% if transaksi.status == 'dibayar' %}selected{% endif %}>Dibayar</option>
+                <option value="dikirim" {% if transaksi.status == 'dikirim' %}selected{% endif %}>Dikirim</option>
+                <option value="selesai" {% if transaksi.status == 'selesai' %}selected{% endif %}>Selesai</option>
+            </select>
+            <button type="submit">Ubah</button>
+        </form>
+    </div>
+{% empty %}
+    <p>Tidak ada transaksi saat ini.</p>
+{% endfor %}
+
+<a href="/" class="btn-kembali">← Kembali</a>
+<a href="http://127.0.0.1:8000/admin" class="btn-admin">→ Admin</a>
+
+<!-- Lihat Laporan Button -->
+<div class="btn-laporan-container">
+    <a href="/transaksi/export-transaksi/" class="btn-laporan">Lihat Laporan</a>
+</div>
+
+</body>
+</html>

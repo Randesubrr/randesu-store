@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detail Produk</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        .action-button {
+            display: inline-block;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .hapus-btn {
+            background-color: #e74c3c;
+        }
+
+        .edit-btn {
+            background-color: #3498db;
+        }
+
+        .back-btn {
+            background-color: #95a5a6;
+        }
+
+        .button-group {
+            max-width: 600px;
+            margin: 20px auto 0;
+        }
+    </style>
+</head>
+<body>
+
+{% if request.user.is_superuser %}
+<div class="button-group">
+    <form action="{% url 'hapus_produk' produk.id %}" method="POST" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="action-button hapus-btn">🗑️ Hapus Produk</button>
+    </form>
+
+    <form action="{% url 'edit_produk' produk.id %}" method="get" style="display:inline;">
+        <button type="submit" class="action-button edit-btn">✏️ Edit Produk</button>
+    </form>
+
+    <a href="{% url 'daftar_produk' %}" class="action-button back-btn">← Kembali ke Daftar Produk</a>
+</div>
+{% endif %}
+
+<div class="container">
+    <h1>{{ produk.nama }}</h1>
+    {% if produk.gambar %}
+        <img src="{{ produk.gambar.url }}" alt="{{ produk.nama }}">
+    {% else %}
+        <img src="{% static 'img/default.jpg' %}" alt="Gambar default">
+    {% endif %}
+
+    <p><strong>Harga:</strong> Rp{{ produk.harga }}</p>
+    <p><strong>Stok:</strong> {{ produk.stok }}</p>
+    <p><strong>Kategori:</strong> {{ produk.kategori }}</p>
+</div>
+
+</body>
+</html>
